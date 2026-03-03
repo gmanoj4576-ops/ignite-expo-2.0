@@ -187,7 +187,18 @@ const RegistrationForm = ({ onBack }) => {
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="space-y-8"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' && e.target.tagName !== 'BUTTON') {
+                                e.preventDefault();
+                                if (step < 2 + fields.length) {
+                                    nextStep();
+                                }
+                            }
+                        }}
+                    >
                         {step === 0 && (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 text-left">
                                 <Input
