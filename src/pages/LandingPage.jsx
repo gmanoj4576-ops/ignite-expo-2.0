@@ -52,10 +52,25 @@ const LandingPage = ({ onRegisterClick }) => {
                     <motion.h2
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="text-neon-blue font-mono mb-4 tracking-[0.2em] uppercase text-[10px] md:text-sm max-w-[280px] md:max-w-none mx-auto leading-relaxed"
+                        className="text-neon-blue font-mono mb-6 tracking-[0.2em] uppercase text-[10px] md:text-sm max-w-[280px] md:max-w-none mx-auto leading-relaxed"
                     >
                         IEEE Robotics & Automation Society & Open-Source Society
                     </motion.h2>
+
+                    {/* Logos Container */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.2, duration: 0.5 }}
+                        className="flex items-center justify-center gap-6 md:gap-10 mb-8"
+                    >
+                        <div className="w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-neon-blue/30 shadow-[0_0_20px_#00f3ff40] bg-white flex items-center justify-center p-1">
+                            <img src="/ieee.jpeg" alt="IEEE Logo" className="w-full h-full object-contain rounded-full" onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<span class="text-neon-blue text-xs font-bold">LOGO 1</span>' }} />
+                        </div>
+                        <div className="w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-neon-purple/30 shadow-[0_0_20px_#b53cff40] bg-white flex items-center justify-center p-1">
+                            <img src="/ras.jpeg" alt="RAS Logo" className="w-full h-full object-contain rounded-full" onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<span class="text-neon-purple text-xs font-bold">LOGO 2</span>' }} />
+                        </div>
+                    </motion.div>
 
                     <motion.h1
                         className="text-4xl sm:text-6xl md:text-8xl font-black mb-6 neon-glow tracking-tighter italic leading-none"
