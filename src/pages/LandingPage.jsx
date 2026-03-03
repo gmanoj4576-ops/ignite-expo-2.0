@@ -41,6 +41,23 @@ const LandingPage = ({ onRegisterClick }) => {
                 ))}
             </div>
 
+            {/* Top Sticker - Kalasalingam Logo */}
+            <motion.div
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="absolute top-0 left-0 w-full z-50 flex justify-center pt-4 md:pt-6 px-4 pointer-events-none"
+            >
+                <div className="bg-white/95 backdrop-blur-md p-2 md:p-3 rounded-2xl shadow-[0_10px_30px_rgba(0,243,255,0.15)] border border-white/20 pointer-events-auto hover:scale-[1.02] transition-transform duration-300">
+                    <img
+                        src="/logo-klu.png"
+                        alt="Kalasalingam Academy Logo"
+                        className="h-10 sm:h-14 md:h-16 lg:h-20 object-contain"
+                        onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<span class="text-blue-900 font-bold px-4">Kalasalingam Academy</span>' }}
+                    />
+                </div>
+            </motion.div>
+
             {/* Hero Section */}
             <section className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center pt-20">
                 <motion.div
