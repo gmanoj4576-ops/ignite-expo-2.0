@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white selection:bg-neon-blue selection:text-black antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+@layer components {
+  .neon-glow {
+    text-shadow: 0 0 8px currentColor, 0 0 15px currentColor;
+  }
+
+  .glass-card {
+    @apply bg-white/[0.03] backdrop-blur-2xl border border-white/5 rounded-[2rem];
+  }
+
+  .btn-primary {
+    @apply px-8 py-4 bg-neon-blue text-black font-black rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-95;
+    /* Use standard CSS for the shadow to avoid Tailwind @apply issues */
+    box-shadow: 0 0 0px rgba(0, 243, 255, 0);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-white/10 rounded-full hover:bg-neon-blue/30 transition-colors;
+}
+
+@keyframes scan-glow {
+  0% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+.animate-scan-glow {
+  animation: scan-glow 2s infinite ease-in-out;
+}
