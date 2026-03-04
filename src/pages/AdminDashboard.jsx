@@ -57,6 +57,7 @@ const AdminDashboard = ({ onBack }) => {
             const members = team.members || [];
             // Create a row for the leader
             const leaderRow = {
+                'Team ID': team.id,
                 'Team Name': team.teamName,
                 'Role': 'Leader',
                 'Name': team.leaderName,
@@ -64,11 +65,13 @@ const AdminDashboard = ({ onBack }) => {
                 'Phone': team.leaderPhone,
                 'College': team.leaderCollege,
                 'Reg No': team.leaderRegNo,
+                'Attendance': team.attendanceMarked ? 'YES' : 'NO',
                 'Registration Date': team.createdAt?.toDate().toLocaleString() || 'N/A'
             };
 
             // Create rows for members
             const memberRows = members.map(m => ({
+                'Team ID': team.id,
                 'Team Name': team.teamName,
                 'Role': 'Member',
                 'Name': m.name,
@@ -76,6 +79,7 @@ const AdminDashboard = ({ onBack }) => {
                 'Phone': 'N/A',
                 'College': m.college,
                 'Reg No': m.regNo,
+                'Attendance': team.attendanceMarked ? 'YES' : 'NO',
                 'Registration Date': team.createdAt?.toDate().toLocaleString() || 'N/A'
             }));
 
@@ -88,6 +92,7 @@ const AdminDashboard = ({ onBack }) => {
 
         // Set column widths
         const wscols = [
+            { wch: 25 }, // Team ID
             { wch: 20 }, // Team Name
             { wch: 10 }, // Role
             { wch: 25 }, // Name
@@ -95,6 +100,7 @@ const AdminDashboard = ({ onBack }) => {
             { wch: 15 }, // Phone
             { wch: 30 }, // College
             { wch: 15 }, // Reg No
+            { wch: 15 }, // Attendance
             { wch: 20 }  // Registration Date
         ];
         worksheet['!cols'] = wscols;
