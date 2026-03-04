@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LandingPage from './pages/LandingPage';
 import RegistrationForm from './pages/RegistrationForm';
-import AdminScanner from './pages/AdminScanner';
 import RobotLoader from './components/RobotLoader';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
@@ -42,7 +41,6 @@ function AppContent() {
                             )}
                         </motion.div>
                     } />
-                    <Route path="/admin" element={<AdminScanner />} />
                 </Routes>
             </AnimatePresence>
 

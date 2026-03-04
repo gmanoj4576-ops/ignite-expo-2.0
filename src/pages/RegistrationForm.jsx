@@ -59,6 +59,25 @@ const RegistrationForm = ({ onBack }) => {
             console.log("onSubmit: Calling registerTeam...");
             const result = await registerTeam(data);
             console.log("onSubmit: registerTeam resolved", result);
+
+            // Send confirmation email via serverless function (Non-blocking)
+            console.log("onSubmit: Sending confirmation email in background to " + data.leaderEmail);
+            fetch('/api/send-confirmation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ teamData: data })
+            }).then(async response => {
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error("onSubmit: Email failed status " + response.status + ":", errorText);
+                    alert(`EMAIL ERROR (${response.status}): ${errorText}. Please check Vercel Environment Variables.`);
+                } else {
+                    console.log("onSubmit: Email sent successfully");
+                }
+            }).catch(emailErr => {
+                console.error("onSubmit: Email fetch request failed:", emailErr);
+            });
+
             setIsSuccess(true);
         } catch (err) {
             console.error("onSubmit: Submission error caught:", err);
@@ -88,7 +107,7 @@ const RegistrationForm = ({ onBack }) => {
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold mb-4">Registration Successful!</h2>
                     <p className="text-gray-400 mb-8 text-sm md:text-base">
-                        Your team **{watchData.teamName}** has been registered for IEEE IGNITE 2.0. Confirmation emails have been dispatched.
+                        Your team **{watchData.teamName}** has been registered for IEEE IGNITE 2.0. A confirmation email has been dispatched to **{watchData.leaderEmail}**.
                     </p>
                     <button onClick={onBack} className="btn-primary w-full py-4 text-base">
                         Back to Home
