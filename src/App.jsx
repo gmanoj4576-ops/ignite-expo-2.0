@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LandingPage from './pages/LandingPage';
 import RegistrationForm from './pages/RegistrationForm';
+import AdminDashboard from './pages/AdminDashboard';
 import RobotLoader from './components/RobotLoader';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
@@ -8,6 +9,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 function AppContent() {
     const [view, setView] = useState('landing');
     const [isInitializing, setIsInitializing] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Artificial initialization for the robot loader
@@ -25,6 +27,9 @@ function AppContent() {
         <div className="min-h-screen bg-black overflow-x-hidden selection:bg-neon-blue selection:text-black">
             <AnimatePresence mode="wait">
                 <Routes>
+                    <Route path="/admin" element={
+                        <AdminDashboard onBack={() => navigate('/')} />
+                    } />
                     <Route path="/" element={
                         <motion.div
                             key="landing"
