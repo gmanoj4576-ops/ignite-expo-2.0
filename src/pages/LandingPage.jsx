@@ -71,7 +71,7 @@ const LandingPage = ({ onRegisterClick }) => {
                         animate={{ opacity: 1 }}
                         className="text-neon-blue font-mono mb-6 tracking-[0.2em] uppercase text-[10px] md:text-sm max-w-[280px] md:max-w-none mx-auto leading-relaxed"
                     >
-                        IEEE Robotics & Automation Society & Open-Source Society
+                        IEEE Robotics & Automation Society
                     </motion.h2>
 
                     {/* Logos Container */}

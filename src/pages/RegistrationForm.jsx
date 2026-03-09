@@ -5,7 +5,7 @@ import {
     User, Users, Mail, Phone, School, Hash, Plus, Trash2,
     ArrowLeft, ArrowRight, Loader2, CheckCircle2, AlertCircle, Sparkles
 } from 'lucide-react';
-import { registerTeam } from '../firebase/firebaseConfig';
+// Removed Firebase registerTeam import in favor of MongoDB Serverless API
 
 const RegistrationForm = ({ onBack }) => {
     const [step, setStep] = useState(0); // 0: Team, 1: Leader, 2-6: Members, 7: Review
@@ -20,6 +20,7 @@ const RegistrationForm = ({ onBack }) => {
             leaderEmail: '',
             leaderPhone: '',
             leaderCollege: '',
+            leaderDepartment: '',
             leaderRegNo: '',
             members: []
         }
@@ -35,10 +36,10 @@ const RegistrationForm = ({ onBack }) => {
     const nextStep = async () => {
         let fieldsToValidate = [];
         if (step === 0) fieldsToValidate = ['teamName'];
-        if (step === 1) fieldsToValidate = ['leaderName', 'leaderEmail', 'leaderPhone', 'leaderCollege', 'leaderRegNo'];
+        if (step === 1) fieldsToValidate = ['leaderName', 'leaderEmail', 'leaderPhone', 'leaderCollege', 'leaderDepartment', 'leaderRegNo'];
         if (step >= 2 && step < 2 + fields.length) {
             const idx = step - 2;
-            fieldsToValidate = [`members.${idx}.name`, `members.${idx}.email`, `members.${idx}.regNo`, `members.${idx}.college`];
+            fieldsToValidate = [`members.${idx}.name`, `members.${idx}.email`, `members.${idx}.regNo`, `members.${idx}.college`, `members.${idx}.department`];
         }
 
         const isValid = await trigger(fieldsToValidate);
@@ -56,9 +57,20 @@ const RegistrationForm = ({ onBack }) => {
         setError(null);
 
         try {
-            console.log("onSubmit: Calling registerTeam...");
-            const result = await registerTeam(data);
-            console.log("onSubmit: registerTeam resolved", result);
+            console.log("onSubmit: Calling MongoDB Register API...");
+            const response = await fetch('/api/register-team', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Failed to register team');
+            }
+
+            console.log("onSubmit: MongoDB registration successful", result);
 
             // Send confirmation email via serverless function (Non-blocking)
             console.log("onSubmit: Sending confirmation email in background to " + data.leaderEmail);
@@ -82,8 +94,8 @@ const RegistrationForm = ({ onBack }) => {
         } catch (err) {
             console.error("onSubmit: Submission error caught:", err);
             let msg = err.message || "An error occurred";
-            if (msg.includes("YOUR_PROJECT_ID") || msg.includes("invalid-app-id") || msg.includes("Firebase: Error")) {
-                msg = "Firebase connection failed. Please ensure Firestore is ENABLED in your Firebase Console and your keys are correct.";
+            if (msg.includes("YOUR_PROJECT_ID") || msg.includes("invalid-app-id") || msg.includes("MongoDB: Error")) {
+                msg = "Database connection failed. Please ensure the server is responding and your configuration is correct.";
             }
             setError(msg);
         } finally {
@@ -244,6 +256,9 @@ const RegistrationForm = ({ onBack }) => {
                                 <div className="md:col-span-2">
                                     <Input label="College Name" {...register('leaderCollege', { required: 'Required' })} error={errors.leaderCollege} icon={<School size={18} />} />
                                 </div>
+                                <div className="md:col-span-2">
+                                    <Input label="Department" {...register('leaderDepartment', { required: 'Required' })} error={errors.leaderDepartment} icon={<Hash size={18} />} />
+                                </div>
                             </motion.div>
                         )}
 
@@ -259,6 +274,7 @@ const RegistrationForm = ({ onBack }) => {
                                 <Input label="Member Email" type="email" {...register(`members.${step - 2}.email`, { required: 'Required' })} error={errors.members?.[step - 2]?.email} icon={<Mail size={18} />} />
                                 <Input label="Register Number" {...register(`members.${step - 2}.regNo`, { required: 'Required' })} error={errors.members?.[step - 2]?.regNo} icon={<Hash size={18} />} />
                                 <Input label="College Name" {...register(`members.${step - 2}.college`, { required: 'Required' })} error={errors.members?.[step - 2]?.college} icon={<School size={18} />} />
+                                <Input label="Department" {...register(`members.${step - 2}.department`, { required: 'Required' })} error={errors.members?.[step - 2]?.department} icon={<Hash size={18} />} />
                             </motion.div>
                         )}
 
@@ -276,7 +292,7 @@ const RegistrationForm = ({ onBack }) => {
                                 {fields.length < 5 && (
                                     <button
                                         type="button"
-                                        onClick={() => { append({ name: '', email: '', regNo: '', college: '' }); setStep(fields.length + 2); }}
+                                        onClick={() => { append({ name: '', email: '', regNo: '', college: '', department: '' }); setStep(fields.length + 2); }}
                                         className="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-neon-blue/30 rounded-2xl text-neon-blue hover:bg-neon-blue/5 transition-all font-bold"
                                     >
                                         <Plus size={20} /> ADD ANOTHER MEMBER
